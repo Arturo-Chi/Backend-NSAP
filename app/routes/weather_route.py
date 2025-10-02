@@ -9,6 +9,9 @@ ws = WeatherService()
 
 route = BaseRoute(prefix="/api", tag="ApiWeather")
 router = route.get_router()
+required = ["T", "U", "V", "RH", "PS"]
+
+
 
 @router.get("/")
 def hello_world():
@@ -43,25 +46,43 @@ def get_WeatherByTime(
     except Exception as e:
         raise HTTPException(status_code = 502, detail = f"variable faltante en: {str(e)}")
     
-    
+    #, 
 @router.get("/weather/date", response_model= WeatherPerDay_Response)
 def get_WeatherAtDate(lat: float, lon: float, year: str, month: str, day:str):
 
-    data = ws.getWeatherByDay()
+    weather_list = ws.getWeatherByDay(lat = lat, lon = lon, year= year, month = month, day = day)
 
-     
+    if isinstance(weather_list, dict) and weather_list.get("status")=="error":
+        raise HTTPException(status_code=502, detail = weather_list.get("message", "Upstream error"))
+    if not weather_list:
+        raise HTTPException(status_code=404, detail="Lista vacía")
+
+
 
     return WeatherPerDay_Response(
         latitude = lat,
         longitude = lon,
-        date = f"{year}/{month}/{day}",
-        hours = data
-
+        date = f"{year}-{month}-{day}",
+        hours = weather_list
     )
 
 
 
-    return WeatherPerDay_Response()
+    
+    
+    
+
+
+     
+#
+#    return WeatherPerDay_Response(  
+#        latitude = lat,
+#        longitude = lon,
+#        date = f"{year}/{month}/{day}",
+#        hours = data
+
+#    )
+
     
 
 
