@@ -1,8 +1,11 @@
 import xarray as xr
+from functools import lru_cache
+
 
 #Construcción de la URL
 class URL:
 
+    #@staticmethod
     def build_URL(yyyy: str, mm: str, dd: str) -> str:
 
         return (
@@ -13,6 +16,8 @@ class URL:
 
 class DataSet:
     
+        #@staticmethod
+        #@lru_cache(maxsize=15)    
         def build_DataSet(url: str):
              ds = xr.open_dataset(url, engine="pydap")
              return ds

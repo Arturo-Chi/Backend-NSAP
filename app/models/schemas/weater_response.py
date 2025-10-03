@@ -12,12 +12,27 @@ class Weather_Response (BaseModel):
     humidity : float = 0.0
 
 
-
-
-
-
 class WeatherPerDay_Response(BaseModel):
     latitude: float = 0.0
     longitude: float = 0.0
     date: str = ""
     hours: List[Weather_Response]
+
+
+class WeatherDay_Response(BaseModel):
+    hours: List[Weather_Response]
+
+
+
+
+class MeditionByYear(BaseModel):
+    year: int = 0,
+    month: int = 0,
+    measurements: List[Weather_Response]
+
+
+class WeatherHistory_Response(BaseModel):
+    latitude : float = 0
+    longitude: float = 0
+    results: List[MeditionByYear]
+

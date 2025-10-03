@@ -3,7 +3,7 @@ from app.core.base_route import BaseRoute
 from app.services.weather_service import WeatherService
 from app.models.schemas.weater_response import Weather_Response
 from app.models.schemas.weater_response import WeatherPerDay_Response
-
+from app.models.schemas.weater_response import WeatherHistory_Response
 
 ws = WeatherService()
 
@@ -67,7 +67,18 @@ def get_WeatherAtDate(lat: float, lon: float, year: str, month: str, day:str):
     )
 
 
+@router.get("/weather/history", response_model = WeatherHistory_Response)
+def get_WeaterAtMonth(lat: float, lon: float, year: int, month: int, day: int):
 
+    results_list = ws.getWeatherHistory(lat = lat, lon = lon, year = year, month = month, day = day)
+
+
+    return WeatherHistory_Response(
+        latitude = lat,
+        longitude = lon,
+        results = results_list 
+
+    )
     
     
     
